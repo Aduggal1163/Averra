@@ -21,4 +21,5 @@ const sosAlertSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-export default SOSAlert=mongoose.model("SOSAlert", sosAlertSchema);
+const SOSAlert=mongoose.model("SOSAlert", sosAlertSchema);
+export default SOSAlert

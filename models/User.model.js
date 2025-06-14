@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const userModel = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        minLength:3
     },
     email: {
         type: String,
@@ -44,4 +45,5 @@ const userModel = new mongoose.Schema({
     
 }, { timestamps: true })
 
-export default User= mongoose.model('user',userModel);
+const User= mongoose.model('user',userModel);
+export default User;

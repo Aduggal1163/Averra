@@ -24,4 +24,5 @@ const visitorPassSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-export default Visitor= mongoose.model("VisitorPass", visitorPassSchema);
+const Visitor= mongoose.model("VisitorPass", visitorPassSchema);
+export default Visitor

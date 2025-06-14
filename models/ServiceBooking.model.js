@@ -27,4 +27,5 @@ const serviceBookingSchema=new mongoose.Schema({
     }
 },{timestamps:true})
 
-export default serviceBooking=mongoose.model('serviceBooking',serviceBookingSchema);
+const serviceBooking=mongoose.model('serviceBooking',serviceBookingSchema);
+export default serviceBooking
