@@ -11,9 +11,9 @@ const visitorPassSchema = new mongoose.Schema({
         required: true
     },
     visitPurpose: {
-    type: String,
-    required: true
-  },
+        type: String,
+        required: true
+    },
     visitTime: {
         type: Date,
         required: true
@@ -28,5 +28,5 @@ const visitorPassSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Visitor= mongoose.model("VisitorPass", visitorPassSchema);
+const Visitor = mongoose.model("VisitorPass", visitorPassSchema);
 export default Visitor
