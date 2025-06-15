@@ -10,7 +10,11 @@ const visitorPassSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    time: {
+    visitPurpose: {
+    type: String,
+    required: true
+  },
+    visitTime: {
         type: Date,
         required: true
     },
