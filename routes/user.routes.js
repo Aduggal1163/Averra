@@ -5,4 +5,4 @@ router.get("/allusers/:role",getAllUsersWithRole);
 router.get("/allusers",getAllUsers);
 router.get("getuser/:id",getUserById);
 router.post("/updateuser/:id",updateUser);
-export default router;
+export default router; 
