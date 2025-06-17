@@ -8,6 +8,7 @@ import GatepassRoutes from './routes/visitorgatepass.routes.js'
 import UserRoutes from './routes/user.routes.js'
 import BroadcastRouter from './routes/broadcast.routes.js'
 import PollRoutes from './routes/poll.routes.js'
+import SOSAlertsRoutes from './routes/sosalert.route.js'
 dotenv.config();
 const app=express();
 app.use(express.json());
@@ -19,6 +20,8 @@ app.use("/api/v1/gatepass",GatepassRoutes);
 app.use("/api/v1/users",UserRoutes);
 app.use("/api/v1/broadcast",BroadcastRouter);
 app.use("/api/v1/poll",PollRoutes);
+app.use("/api/v1/sos",SOSAlertsRoutes);
+
 dbconnect();
 app.listen(process.env.PORT,()=>{
     console.log(`server is running on port ${process.env.PORT}`);
