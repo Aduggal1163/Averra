@@ -31,6 +31,26 @@ export const viewAllVisitorGatepass = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+export const viewAllPendingGatepass=async(req,res)=>{
+    try {
+        if(req.user.role != 'guard')
+        {
+            return res.status(403).json({
+                message:"Only guard can see the pending gatepasses"
+            })
+        }
+        const pendinggatepass = await VisitorGatePass.find({status:'pending'})
+        .populate('residentId', 'name houseNumber')
+        .sort({ createdAt: -1 });
+        return res.status(200).json({
+            message:"All pending gatepass retrieved",
+            pendinggatepass
+        })
+    } catch (error) {
+        console.error("Get pending Gatepass Error:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
 // Guard accepts/rejects gatepass
 export const acceptRejectVisitorGatepass = async (req, res) => {
     try {
