@@ -4,7 +4,7 @@ import { createBroadcast, deleteBroadcast, getAllBroadcasts, updateBroadcast } f
 import { requireSignIn } from "../middlewares/auth.js";
 const router=express.Router();
 router.post("/createBroadcast",requireSignIn,upload.single('image'),createBroadcast);
-router.get("/getAllBroadcast",requireSignIn,getAllBroadcasts);
+router.get("/getAllBroadcast",getAllBroadcasts);
 router.post("/updateBroadcast/:id",requireSignIn,updateBroadcast)
 router.delete("/deleteBroadcast/:id",requireSignIn,deleteBroadcast);
 export default router;
