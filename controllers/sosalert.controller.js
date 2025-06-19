@@ -73,3 +73,11 @@ export const respondToSOSAlert=async(req,res)=>{
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+export const getUnresolvedSOS = async (req, res) => {
+  try {
+    const alerts = await SOSAlert.find({ isResolved: false }).populate("userId", "name role");
+    res.status(200).json({ message: "Unresolved alerts fetched", alerts });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
