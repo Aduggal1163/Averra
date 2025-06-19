@@ -103,3 +103,22 @@ export const markTaskAchieved = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    const task = await Task.findByIdAndDelete(taskId);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error("Delete Task Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

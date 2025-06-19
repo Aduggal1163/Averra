@@ -4,7 +4,8 @@ import {
   getMyTasks,
   updateTaskStatus,
   markTaskAchieved,
-  getAllUnachievedTasks
+  getAllUnachievedTasks,
+  deleteTask
 } from "../controllers/guardtask.controller.js";
 import { requireSignIn } from "../middlewares/auth.js";
 
@@ -15,5 +16,6 @@ router.get("/mytasks", requireSignIn, getMyTasks); // Guard only
 router.post("/update/:taskId", requireSignIn, updateTaskStatus); // Guard
 router.post("/achieve/:taskId", requireSignIn, markTaskAchieved); // Admin
 router.get("/unachieved", requireSignIn, getAllUnachievedTasks);
+router.delete("/deleteTask/:taskId",requireSignIn,deleteTask);
 
 export default router;
