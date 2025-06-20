@@ -3,7 +3,7 @@ import User from '../models/User.model.js'
 export const bookingServiceProvider = async (req, res) => {
     try {
         const { serviceprovider_id, service, dateTime } = req.body;
-        const resident_id = req.user.id;// from requireSignIn middleware
+        const resident_id = req.user.id;
         if (!serviceprovider_id || !service || !dateTime) {
             return res.status(400).json({ message: "All fields are required" });
         }
