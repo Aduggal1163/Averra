@@ -106,3 +106,29 @@ export const getMyGatepass = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+// visitor log
+// In your controller
+export const getTodaysVisitorLog = async (req, res) => {
+  try {
+    // Get today's date at midnight (start of day)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Get tomorrow's date at midnight (end of today)
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const logs = await VisitorGatePass.find({
+      visitTime: {
+        $gte: today,
+        $lt: tomorrow
+      }
+    })
+      .populate('residentId', 'name houseNumber')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ visitorLog: logs });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
