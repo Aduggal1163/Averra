@@ -1,0 +1,32 @@
+import express from "express";
+import dotenv from "dotenv";
+import { dbconnect } from "./db/dbconnect.js";
+import AuthRouter from './routes/auth.routes.js'
+import BookingRoutes from './routes/booking.routes.js'
+import ComplaintRoutes from './routes/complaint.routes.js'
+import GatepassRoutes from './routes/visitorgatepass.routes.js'
+import UserRoutes from './routes/user.routes.js'
+import BroadcastRouter from './routes/broadcast.routes.js'
+import PollRoutes from './routes/poll.routes.js'
+import SOSAlertsRoutes from './routes/sosalert.route.js'
+import GuardTaskRoutes from './routes/guardtask.routes.js'
+import cors from 'cors'
+dotenv.config();
+const app=express();
+app.use(express.json());
+app.use(cors())
+
+app.use("/api/v1/auth", AuthRouter);
+app.use("/api/v1/service-booking",BookingRoutes);
+app.use("/api/v1/complaints",ComplaintRoutes);
+app.use("/api/v1/gatepass",GatepassRoutes);
+app.use("/api/v1/users",UserRoutes);
+app.use("/api/v1/broadcast",BroadcastRouter);
+app.use("/api/v1/poll",PollRoutes);
+app.use("/api/v1/sos",SOSAlertsRoutes);
+app.use("/api/v1/guardtask",GuardTaskRoutes)
+
+dbconnect();
+app.listen(process.env.PORT,()=>{
+    console.log(`server is running on port ${process.env.PORT}`);
+})
