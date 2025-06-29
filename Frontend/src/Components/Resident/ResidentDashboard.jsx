@@ -15,8 +15,7 @@ import {
   Clock,
   Calendar
 } from "lucide-react";
-import SOSAlertsDashboard from './SOSAlertsDashboard';
-import PollDashboard from './PollDashboard';
+import Dashboard from './Dashboard';
 
 function ResidentDashboard() {
   const navigate = useNavigate();
@@ -138,8 +137,7 @@ function ResidentDashboard() {
         </div>
       </div>
       <div>
-        <SOSAlertsDashboard/>
-        <PollDashboard/>
+      <Dashboard/>
       </div>
     </div>
     

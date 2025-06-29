@@ -100,3 +100,12 @@ export const getAllBookings = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+// Controller
+export const getAllServiceProviders = async (req, res) => {
+  try {
+    const providers = await User.find({ role: 'service_provider' }).select('name services_offered');
+    res.status(200).json({ providers });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch providers' });
+  }
+};
