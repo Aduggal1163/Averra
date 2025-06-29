@@ -85,3 +85,18 @@ export const updateBookingStatus = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+// Get all bookings (admin only)
+export const getAllBookings = async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') return res.status(403).json({ message: 'Access denied' });
+
+    const bookings = await ServiceBooking.find()
+      .populate('resident_id', 'name email')
+      .populate('serviceprovider_id', 'name services_offered');
+
+    res.status(200).json({ message: 'All bookings retrieved', bookings });
+  } catch (error) {
+    console.error("Admin Get All Bookings Error:", error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
