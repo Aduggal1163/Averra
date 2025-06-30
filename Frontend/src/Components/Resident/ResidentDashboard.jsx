@@ -55,6 +55,7 @@ function ResidentDashboard() {
       const broadcastRes = await axios.get('http://localhost:8080/api/v1/broadcast/getAllBroadcast', { headers });
       setBroadcasts(broadcastRes.data.broadcasts || []);
 
+
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load data');
@@ -96,7 +97,6 @@ function ResidentDashboard() {
       setLoading(false);
     }
   };
-
 
   const renderOverview = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -294,7 +294,6 @@ function ResidentDashboard() {
       fetchUserData(user.id);
     }} />
   );
-
   if (!user) return <div>Loading...</div>;
   return (
     <div className="min-h-screen bg-gray-50">

@@ -47,7 +47,7 @@ export const getUserById = async (req, res) => {
                 message: "User ID is required"
             })
         }
-        const user=await User.findById(id).select("-password");;
+        const user=await User.findById(id).select("-password");
         if(!user)
         {
             return res.status(404).json({

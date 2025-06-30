@@ -97,7 +97,8 @@ export const signinController = async (req, res) => {
                 id: existingUser._id,
                 name: existingUser.name,
                 email: existingUser.email,
-                role: existingUser.role
+                role: existingUser.role,
+                houseNumber:existingUser.houseNumber
             },
             token
         })
