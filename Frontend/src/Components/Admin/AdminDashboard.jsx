@@ -7,11 +7,12 @@ import ComplaintDashboard from './Complaint/ComplaintDashboard.jsx';
 import GuardDashboard from './Guard/GuardDashboard.jsx';
 import SOSAlertDashboard from './SOS/SOSAlertDashboard.jsx';
 import PollDashboard from './Polls/PollDashboard.jsx';
+import {useNavigate} from 'react-router-dom';
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('users');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null); // Content to display in the modal
-     
+  const navigate=useNavigate();
   // Helper function to render a section title
   const SectionTitle = ({ title }) => (
     <h2 className="text-3xl font-bold mb-6 text-gray-800 border-b-2 border-blue-300 pb-2">
@@ -36,7 +37,10 @@ const AdminDashboard = () => {
       </div>
     );
   };
-
+const handleLogout=()=>{
+  localStorage.clear();
+  navigate('/login');
+}
 
   return (
     <div className="min-h-screen bg-gray-100 font-inter text-gray-900">
@@ -54,6 +58,8 @@ const AdminDashboard = () => {
         <div className="container mx-auto px-6">
           <h1 className="text-4xl font-extrabold tracking-tight text-center">Admin Dashboard</h1>
         </div>
+        <button onClick={()=>handleLogout()}
+        >Logout</button>
       </header>
 
       <div className="flex flex-col lg:flex-row container mx-auto px-6 py-8 gap-8">
