@@ -68,7 +68,7 @@ export const deleteBroadcast = async (req, res) => {
                 message: "Broadcasts not found"
             })
         }
-        await broadcasts.findByIdAndDelete(id);
+        await Broadcast.findByIdAndDelete(id);
         return res.status(200).json({
             message: "Broadcast deleted successfully"
         })
@@ -97,12 +97,6 @@ export const updateBroadcast = async (req, res) => {
         }
         if (category)
         {
-            if(!['post','event'].includes('category'))
-            {
-                return res.status(400).json({
-                    message:"Invalid Category"
-                })
-            }
             updatedData.category = category;
         }
         const updatedBroadcast= await Broadcast.findByIdAndUpdate(id,updatedData,{new:true});
