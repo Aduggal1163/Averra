@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box, Paper, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Button, Typography, CircularProgress,
-  Snackbar, Alert, Chip, Stack, Tabs, Tab, Grid, Card, CardContent, Divider
+  Snackbar, Alert, Chip, Stack, Tabs, Tab, Grid, Card, CardContent, Divider,
+  ButtonBase
 } from '@mui/material';
 import { Done, Close, MonetizationOn, Handyman } from '@mui/icons-material';
 
@@ -15,6 +17,7 @@ const ServiceProviderBookings = () => {
   const [tabValue, setTabValue] = useState(0);
   const [earnings, setEarnings] = useState(0);
   const [servicesOffered, setServicesOffered] = useState([]);
+  const navigate = useNavigate();
 
   const BASE_URL = 'http://localhost:8080/api/v1/service-booking';
   const token = localStorage.getItem('token');
@@ -96,11 +99,21 @@ const ServiceProviderBookings = () => {
       <Typography color="error">{error}</Typography>
     </Box>
   );
+  const handleLogoutFunction = () => {
+    localStorage.clear();
+    navigate("/login");
+  }
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Service Provider Dashboard
+        <span
+          className="p-3 text-lg rounded-full hover:bg-red-400 bg-white outline outline-2 outline-red-500"
+          style={{ marginLeft: "63%" }}
+        >
+          <button onClick={() => handleLogoutFunction()}>Logout</button>
+        </span>
       </Typography>
 
       {/* Header: Earnings & Services */}
@@ -175,7 +188,7 @@ const ServiceProviderBookings = () => {
                         label={booking.status}
                         color={
                           booking.status === 'accepted' ? 'success' :
-                          booking.status === 'rejected' ? 'error' : 'warning'
+                            booking.status === 'rejected' ? 'error' : 'warning'
                         }
                       />
                     </TableCell>

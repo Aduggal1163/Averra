@@ -42,6 +42,11 @@ const userModel = new mongoose.Schema({
     assignedHouseNo:{
         type:String,
     },
+    phoneNumber:{
+        type:Number,
+        maxLenght:10,
+        minLength:10
+    }
     
 }, { timestamps: true })
 

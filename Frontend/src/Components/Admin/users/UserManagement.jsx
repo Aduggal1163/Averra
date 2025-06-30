@@ -21,6 +21,7 @@ function UserManagement() {
   };
 
   const handleUpdateUserInfo = async (id, updatedData) => {
+    console.log("Updated Data being sent:", updatedData);
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -39,17 +40,19 @@ function UserManagement() {
           },
         }
       );
-
-      if (res.status === 200) {
-        setUsers(users.map(user =>
-          user._id === id ? { ...user, ...updatedData } : user
+         setUsers(users.map(user =>
+          user._id === id ? { ...user, ...res.data.user } : user
         ));
         setIsModalOpen(false);
         setUpdatedUser(null);
-      }
+        alert("User updated successfully!");
     } catch (error) {
       console.error("Error updating user info:", error);
-      alert("Failed to update user. Please try again.");
+      if (error.response) {
+        alert(`Failed to update user: ${error.response.data.message}`);
+      } else {
+        alert("Failed to update user. Please try again.");
+      }
     }
   };
 
