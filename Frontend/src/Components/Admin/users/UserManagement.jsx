@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('users');
   const [updatedUser, setUpdatedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,10 +14,13 @@ function UserManagement() {
 
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const res = await axios.get('http://localhost:8080/api/v1/users/allusers');
       setUsers(res.data.users);
     } catch (error) {
       console.log("Fetch user error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,58 +97,87 @@ function UserManagement() {
     setUpdatedUser({ ...user }); // make a copy to avoid direct mutation
     setIsModalOpen(true);
   };
-
-  const SectionTitle = ({ title }) => (
-    <h2 className="text-3xl font-bold mb-6 text-gray-800 border-b-2 border-blue-300 pb-2">
-      {title}
-    </h2>
-  );
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <main className="bg-white rounded-xl shadow-lg p-8">
+return (
+    <div className="min-h-screen">
+      <main className="max-w-7xl mx-auto">
         {activeSection === 'users' && (
-          <section>
-            <SectionTitle title="User Management" />
-            <p className="text-gray-600 mb-6">Manage user roles and information.</p>
-            <div className="overflow-x-auto rounded-lg shadow">
-              <table className="min-w-full bg-white border-collapse">
-                <thead className="bg-blue-50 text-blue-700">
+          <section className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
                   <tr>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">#</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">Name</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">Email</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">Role</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">House Number</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">Phone</th>
-                    <th className="py-3 px-4 text-left text-sm font-semibold uppercase">Actions</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">#</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">User</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">Contact</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">Role</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">Address</th>
+                    <th className="py-4 px-6 text-left font-semibold uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="text-gray-700">
-                  {users.map((user, index) => (
-                    <tr key={user._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="py-3 px-4 border-b border-gray-200">{index + 1}</td>
-                      <td className="py-3 px-4 border-b border-gray-200">{user.name}</td>
-                      <td className="py-3 px-4 border-b border-gray-200">{user.email}</td>
-                      <td className="py-3 px-4 border-b border-gray-200 capitalize">{user.role}</td>
-                      <td className="py-3 px-4 border-b border-gray-200 capitalize">{user.houseNumber}</td>
-                      <td className="py-3 px-4 border-b border-gray-200 capitalize">{user.phoneNumber}</td>
-                      <td className="py-3 px-4 border-b border-gray-200">
-                        <button
-                          onClick={() => openUpdateUserInfoModal(user)}
-                          className="px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition duration-200 shadow-md"
-                        >
-                          Edit Info
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(user._id)}
-                          className="px-3 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition duration-200 shadow-md"
-                        >
-                          Delete
-                        </button>
+                <tbody className="divide-y divide-gray-200">
+                  {loading ? (
+                    <tr>
+                      <td colSpan="6" className="py-12 text-center">
+                        <div className="flex justify-center">
+                          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
                       </td>
                     </tr>
-                  ))}
+                  ) : users.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="py-8 text-center text-gray-500">
+                        No users found
+                      </td>
+                    </tr>
+                  ) : (
+                    users.map((user, index) => (
+                      <tr key={user._id} className="hover:bg-gray-50 transition-colors">
+                        <td className="py-4 px-6 font-medium text-gray-900">{index + 1}</td>
+                        <td className="py-4 px-6">
+                          <div className="flex items-center">
+                            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 flex items-center justify-center mr-3">
+                              <span className="text-gray-700 font-bold">{user.name.charAt(0)}</span>
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">{user.name}</div>
+                              <div className="text-gray-500 text-sm">{user.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-gray-700">{user.phoneNumber || '-'}</td>
+                        <td className="py-4 px-6">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            user.role === 'admin' 
+                              ? 'bg-purple-100 text-purple-800' 
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {user.role}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6 text-gray-700">{user.houseNumber || '-'}</td>
+                        <td className="py-4 px-6 space-x-2">
+                          <button
+                            onClick={() => openUpdateUserInfoModal(user)}
+                            className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition flex items-center"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(user._id)}
+                            className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition flex items-center"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -154,50 +187,54 @@ function UserManagement() {
 
       {/* Modal */}
       {isModalOpen && updatedUser && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex justify-center items-center">
-          <div className="bg-white rounded-lg w-full max-w-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Update User Information for {updatedUser.name}
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-5">
+              <h3 className="text-xl font-semibold text-white">
+                Update {updatedUser.name}'s Information
+              </h3>
+            </div>
+            
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleUpdateUserInfo(updatedUser._id, updatedUser);
               }}
-              className="space-y-4"
+              className="p-6 space-y-4"
             >
               {["name", "email", "phoneNumber", "houseNumber"].map((field) => (
-                <div key={field}>
-                  <label className="block text-gray-700 text-sm font-semibold capitalize">
-                    {field}:
+                <div key={field} className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700 capitalize">
+                    {field.replace(/([A-Z])/g, ' $1').trim()}:
                   </label>
                   <input
-                    type="text"
+                    type={field === 'email' ? 'email' : 'text'}
                     value={updatedUser[field] || ""}
                     onChange={(e) =>
                       setUpdatedUser((prev) => ({ ...prev, [field]: e.target.value }))
                     }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 text-gray-800"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                     required
                   />
                 </div>
               ))}
-              <div className="flex justify-end gap-4">
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-                >
-                  Update Info
-                </button>
+              
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
                     setUpdatedUser(null);
                   }}
-                  className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                  className="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
                 >
                   Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:opacity-90 transition shadow-md"
+                >
+                  Update Information
                 </button>
               </div>
             </form>
@@ -207,5 +244,4 @@ function UserManagement() {
     </div>
   );
 }
-
 export default UserManagement;

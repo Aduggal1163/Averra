@@ -113,9 +113,7 @@ const PollDashboard = () => {
   const formatDate = (dateStr) => new Date(dateStr).toLocaleString();
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">📊 Poll Dashboard</h1>
-
+    <div className="p-3 min-h-screen">
       <div className="mb-6 text-right">
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}

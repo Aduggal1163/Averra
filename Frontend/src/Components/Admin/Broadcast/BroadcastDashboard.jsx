@@ -222,20 +222,19 @@ const BroadcastDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
                     <div className="px-6 py-4 border-b border-gray-200">
                         <div className="flex items-center justify-between">
-                            <h1 className="text-2xl font-bold text-gray-900">Broadcast Management</h1>
                             {!showCreateForm && !editingBroadcast && (
                                 <button
                                     onClick={() => {
                                         setShowCreateForm(true);
                                         resetForm();
                                     }}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 ml-212"
                                 >
                                     <Plus className="w-4 h-4" />
                                     <span>Create Broadcast</span>

@@ -176,25 +176,6 @@ const deleteComplaint = async (complaintId) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Complaint Management</h1>
-              <p className="text-gray-600">Manage and track all resident complaints</p>
-            </div>
-            <button
-              onClick={fetchComplaints}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Refresh</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
@@ -306,7 +287,7 @@ const deleteComplaint = async (complaintId) => {
             </div>
           ) : (
             filteredComplaints.map((complaint) => (
-              <div key={complaint._id} className="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+              <div key={complaint._id} className="bg-gray-50 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
                 <div className="p-6">
                   <div className="flex flex-col lg:flex-row gap-6">
                     {/* Main Content */}
