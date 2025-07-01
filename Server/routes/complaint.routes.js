@@ -1,4 +1,4 @@
-import { raiseComplaint,getComplaints,getAllComplaints, updateComplaintStatus } from "../controllers/complaint.controller.js";
+import { raiseComplaint,getComplaints,getAllComplaints, updateComplaintStatus, deleteComplaint } from "../controllers/complaint.controller.js";
 import { requireSignIn } from '../middlewares/auth.js';
 import upload from '../middlewares/upload.middleware.js';
 import {Router} from 'express';
@@ -7,4 +7,5 @@ router.post('/raise-complaint',requireSignIn,upload.single('image'),raiseComplai
 router.get("/getComplaints/:userId",requireSignIn,getComplaints)
 router.get("/getAllComplaints",requireSignIn,getAllComplaints) // for admins and guards
 router.post("/updateComplaint/:complaintId",requireSignIn,updateComplaintStatus);
+router.delete("/deleteComplaint/:complaintId",requireSignIn,deleteComplaint);
 export default router;

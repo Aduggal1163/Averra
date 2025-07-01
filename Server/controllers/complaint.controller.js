@@ -92,3 +92,25 @@ export const updateComplaintStatus = async(req,res)=>{
     res.status(500).json({ message: "Internal Server Error" });
     }
 }
+export const deleteComplaint = async (req, res) => {
+  try {
+    const { complaintId } = req.params;
+    
+    const complaint = await Complaint.findById(complaintId);
+
+    if (!complaint) {
+      return res.status(404).json({
+        message: 'Complaint not found',
+      });
+    }
+
+    await Complaint.findByIdAndDelete(complaintId);
+
+    res.status(200).json({
+      message: 'Complaint deleted successfully',
+    });
+  } catch (error) {
+    console.error("Delete Complaint Error:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
