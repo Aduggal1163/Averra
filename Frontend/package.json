@@ -18,6 +18,7 @@
     "aos": "^2.3.4",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "framer-motion": "^12.20.5",
     "lucide-react": "^0.518.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
