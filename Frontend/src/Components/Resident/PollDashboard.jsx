@@ -121,7 +121,7 @@ const PollDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 w-400">
+    <div className="min-h-screen bg-gray-50 w-290">
       {/* Header */}
       <header className="bg-white shadow-sm border-b ">
         <div className="max-w-6xl mx-auto px-4 py-6 w-300">
@@ -130,13 +130,7 @@ const PollDashboard = () => {
               <Vote className="w-8 h-8 text-blue-600" />
               <h1 className="text-2xl font-bold text-gray-900">Community Polls</h1>
             </div>
-            <button
-              onClick={fetchPolls}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Refresh</span>
-            </button>
+            
           </div>
         </div>
       </header>

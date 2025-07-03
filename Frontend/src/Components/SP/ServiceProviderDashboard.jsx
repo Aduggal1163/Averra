@@ -105,54 +105,92 @@ const ServiceProviderBookings = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Service Provider Dashboard
-        <span
-          className="p-3 text-lg rounded-full hover:bg-red-400 bg-white outline outline-2 outline-red-500"
-          style={{ marginLeft: "63%" }}
-        >
-          <button onClick={() => handleLogoutFunction()}>Logout</button>
-        </span>
-      </Typography>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f9fafb', px: { xs: 2, md: 5 }, py: 4 }}>
+      {/* Header */}
+      <Grid container justifyContent="space-between" alignItems="center" mb={4}>
+        <Grid item>
+          <Typography variant="h4" fontWeight="bold" color="primary.main">
+            Service Provider Dashboard
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="error"
+            sx={{ fontWeight: 600 }}
+            onClick={handleLogoutFunction}
+          >
+            Logout
+          </Button>
+        </Grid>
+      </Grid>
 
-      {/* Header: Earnings & Services */}
-      <Grid container spacing={2} mb={3}>
+      {/* Summary Cards */}
+      <Grid container spacing={4} mb={4}>
         <Grid item xs={12} md={6}>
-          <Card variant="outlined">
+          <Card sx={{ boxShadow: 4, borderRadius: 3 }}>
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1}>
+              <Stack direction="row" spacing={2} alignItems="center">
                 <MonetizationOn color="primary" fontSize="large" />
-                <Typography variant="h5">Earnings: ${earnings.toFixed(2)}</Typography>
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Total Earnings
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    ${earnings.toFixed(2)}
+                  </Typography>
+                </Box>
               </Stack>
             </CardContent>
           </Card>
         </Grid>
+
         <Grid item xs={12} md={6}>
-          <Card variant="outlined">
+          <Card sx={{ boxShadow: 4, borderRadius: 3 }}>
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1}>
+              <Stack direction="row" spacing={2} alignItems="center" mb={2}>
                 <Handyman color="primary" fontSize="large" />
-                <Typography variant="h5">Services Offered</Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Services Offered
+                </Typography>
               </Stack>
-              <Box mt={1}>
-                {servicesOffered.map((service, idx) => (
-                  <Chip key={idx} label={service} sx={{ mr: 1, mt: 1 }} />
-                ))}
+              <Box>
+                {servicesOffered.length > 0 ? (
+                  servicesOffered.map((service, idx) => (
+                    <Chip
+                      key={idx}
+                      label={service}
+                      color="primary"
+                      variant="outlined"
+                      sx={{ mr: 1, mb: 1 }}
+                    />
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No services added.
+                  </Typography>
+                )}
               </Box>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 4 }} />
 
-      {/* Tabs for Pending/Accepted/Rejected */}
-      <Paper elevation={3} sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Bookings
+      {/* Bookings Section */}
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 3, mb: 4 }}>
+        <Typography variant="h6" fontWeight="bold" mb={2}>
+          Manage Bookings
         </Typography>
-        <Tabs value={tabValue} onChange={handleTabChange}>
+
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          textColor="primary"
+          indicatorColor="primary"
+          variant="scrollable"
+        >
           <Tab label="Pending" />
           <Tab label="Accepted" />
           <Tab label="Rejected" />
@@ -160,43 +198,55 @@ const ServiceProviderBookings = () => {
       </Paper>
 
       {/* Bookings Table */}
-      <Paper elevation={3} sx={{ p: 2 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
         {filteredBookings.length === 0 ? (
-          <Typography>No bookings found</Typography>
+          <Typography align="center" py={5} color="text.secondary">
+            No bookings found in this category.
+          </Typography>
         ) : (
           <TableContainer>
             <Table>
-              <TableHead>
+              <TableHead sx={{ bgcolor: '#f0f4f8' }}>
                 <TableRow>
-                  <TableCell>Resident Name</TableCell>
-                  <TableCell>Resident Email</TableCell>
-                  <TableCell>Service</TableCell>
-                  <TableCell>Date & Time</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell><strong>Resident Name</strong></TableCell>
+                  <TableCell><strong>Email</strong></TableCell>
+                  <TableCell><strong>Service</strong></TableCell>
+                  <TableCell><strong>Date & Time</strong></TableCell>
+                  <TableCell><strong>Status</strong></TableCell>
+                  <TableCell><strong>Actions</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredBookings.map((booking) => (
-                  <TableRow key={booking._id}>
+                  <TableRow key={booking._id} hover>
                     <TableCell>{booking.resident_id?.name || 'N/A'}</TableCell>
                     <TableCell>{booking.resident_id?.email || 'N/A'}</TableCell>
                     <TableCell>{booking.service}</TableCell>
-                    <TableCell>{new Date(booking.dateTime).toLocaleString()}</TableCell>
+                    <TableCell>
+                      {new Date(booking.dateTime).toLocaleString('en-IN', {
+                        dateStyle: 'medium',
+                        timeStyle: 'short',
+                      })}
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={booking.status}
                         color={
-                          booking.status === 'accepted' ? 'success' :
-                            booking.status === 'rejected' ? 'error' : 'warning'
+                          booking.status === 'accepted'
+                            ? 'success'
+                            : booking.status === 'rejected'
+                            ? 'error'
+                            : 'warning'
                         }
+                        sx={{ fontWeight: 600 }}
                       />
                     </TableCell>
                     <TableCell>
-                      {booking.status === 'pending' && (
+                      {booking.status === 'pending' ? (
                         <Stack direction="row" spacing={1}>
                           <Button
                             variant="contained"
+                            size="small"
                             color="success"
                             startIcon={<Done />}
                             onClick={() => updateStatus(booking._id, 'accepted')}
@@ -205,6 +255,7 @@ const ServiceProviderBookings = () => {
                           </Button>
                           <Button
                             variant="outlined"
+                            size="small"
                             color="error"
                             startIcon={<Close />}
                             onClick={() => updateStatus(booking._id, 'rejected')}
@@ -212,8 +263,11 @@ const ServiceProviderBookings = () => {
                             Reject
                           </Button>
                         </Stack>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          No actions available
+                        </Typography>
                       )}
-                      {booking.status !== 'pending' && <em>No actions available</em>}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -223,11 +277,12 @@ const ServiceProviderBookings = () => {
         )}
       </Paper>
 
-      {/* Snackbar for messages */}
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseSnackbar}

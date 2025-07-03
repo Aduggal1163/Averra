@@ -25,10 +25,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 ml-100 flex flex-col w-100">
+    <div className="min-h-screen   flex flex-col ">
       {/* Header */}
       <header className="bg-white shadow-md py-4 px-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Resident Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-gray-800">Hey Resident, Manage Your Community Services</h1>
       </header>
 
       {/* Tab Navigation */}

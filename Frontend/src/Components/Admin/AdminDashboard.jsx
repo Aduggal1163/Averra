@@ -192,7 +192,7 @@ const AdminDashboard = () => {
             {activeSection === 'service_providers' && (
               <div className="space-y-6">
                 <SectionTitle title="Service Providers" />
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+                <div className="">
                   <Booking />
                 </div>
               </div>
@@ -222,7 +222,7 @@ const AdminDashboard = () => {
             {activeSection === 'tasks' && (
               <section>
                 <SectionTitle title="Guard Tasks" />
-                <div className="rounded-xl p-6 border border-purple-200 shadow-lg shadow-purple-200/50 hover:shadow-purple-300/50 transition-all duration-300">
+                <div className="">
                   <GuardDashboard />
                 </div>
 
