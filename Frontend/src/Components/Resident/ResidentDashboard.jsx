@@ -13,7 +13,8 @@ import {
   LogOut,
   Plus,
   Clock,
-  Calendar
+  Calendar,
+  TrendingUp
 } from "lucide-react";
 import Dashboard from './Dashboard';
 
@@ -26,6 +27,7 @@ function ResidentDashboard() {
   const [broadcasts, setBroadcasts] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
+  const [polls,setPolls]=useState([]);
 
   // Slides for complaints and gatepass
   const [complaintsTab, setComplaintsTab] = useState('all');
@@ -39,7 +41,7 @@ function ResidentDashboard() {
     { id: 'error', label: 'Error' }
   ];
   const [announcementTab, setAnnouncementTab] = useState('all');
-
+  const [sosAlerts,setSosAlerts ]=useState([]);
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     if (!userData) {
@@ -69,6 +71,14 @@ function ResidentDashboard() {
       // Fetch broadcasts
       const broadcastRes = await axios.get('http://localhost:8080/api/v1/broadcast/getAllBroadcast', { headers });
       setBroadcasts(broadcastRes.data.broadcasts || []);
+
+      // Fetch SOS alerts
+    const sosRes = await axios.get(`http://localhost:8080/api/v1/sos/getunresolvedSOS`, { headers });
+    setSosAlerts(sosRes.data.alerts || []);
+
+    const poll=await axios.get('http://localhost:8080/api/v1/poll/getallpolls',{headers});
+    setPolls(poll.data.polls||[]);
+
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load data');
@@ -109,44 +119,81 @@ function ResidentDashboard() {
   };
 
   // Overview Card
-  const renderOverview = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div className="bg-white/90 p-6 rounded-xl shadow-lg border border-teal-100 flex items-center gap-4">
-        <MessageSquare className="h-10 w-10 text-teal-600" />
-        <div>
-          <p className="text-sm text-teal-700">Active Complaints</p>
-          <p className="text-2xl font-bold text-teal-900">
-            {complaints.filter(c => c.status === 'open' || c.status === 'in-progress').length}
-          </p>
+const renderOverview = () => {
+  const openComplaints = complaints.filter(c => c.status === 'open' || c.status === 'in-progress');
+  const totalComplaints = complaints.length;
+  const recentAnnouncements = broadcasts.filter(b => new Date(b.createdAt) > new Date(Date.now() - 72 * 60 * 60 * 1000));
+  const lastGatepass = gatepasses[gatepasses.length - 1];
+  const activeSOSAlerts = sosAlerts.filter(alert => alert.isResolved === false);
+  const activePolls = polls.filter(p => new Date(p.expiresAt) > new Date());
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Total Complaints */}
+        <div className="bg-gradient-to-br from-teal-100 to-teal-50 p-6 rounded-xl shadow-lg border border-teal-200 hover:shadow-xl transition">
+          <MessageSquare className="h-10 w-10 text-teal-700 mb-3" />
+          <h3 className="text-lg font-semibold text-teal-800">Total Complaints</h3>
+          <p className="text-3xl font-bold text-teal-900 mt-1">{totalComplaints}</p>
         </div>
-      </div>
-      <div className="bg-white/90 p-6 rounded-xl shadow-lg border border-teal-100 flex items-center gap-4">
-        <Key className="h-10 w-10 text-emerald-600" />
-        <div>
-          <p className="text-sm text-teal-700">Pending Gatepass</p>
-          <p className="text-2xl font-bold text-teal-900">
-            {gatepasses.filter(g => g.status === 'open').length}
-          </p>
+
+        {/* Open/In-progress Complaints */}
+        <div className="bg-gradient-to-br from-yellow-100 to-yellow-50 p-6 rounded-xl shadow-lg border border-yellow-200 hover:shadow-xl transition">
+          <AlertTriangle className="h-10 w-10 text-yellow-700 mb-3" />
+          <h3 className="text-lg font-semibold text-yellow-800">Open Complaints</h3>
+          <p className="text-3xl font-bold text-yellow-900 mt-1">{openComplaints.length}</p>
         </div>
-      </div>
-      <div className="bg-white/90 p-6 rounded-xl shadow-lg border border-teal-100 flex items-center gap-4">
-        <Megaphone className="h-10 w-10 text-purple-600" />
-        <div>
-          <p className="text-sm text-teal-700">New Announcements</p>
-          <p className="text-2xl font-bold text-teal-900">
-            {broadcasts.filter(b => new Date(b.createdAt) > new Date(Date.now() - 400 * 60 * 60 * 1000)).length}
-          </p>
+
+        {/* Recent Announcements */}
+        <div className="bg-gradient-to-br from-purple-100 to-purple-50 p-6 rounded-xl shadow-lg border border-purple-200 hover:shadow-xl transition">
+          <Megaphone className="h-10 w-10 text-purple-700 mb-3" />
+          <h3 className="text-lg font-semibold text-purple-800">New Announcements</h3>
+          <p className="text-3xl font-bold text-purple-900 mt-1">{recentAnnouncements.length}</p>
         </div>
-      </div>
-      <div className="bg-white/90 p-6 rounded-xl shadow-lg border border-teal-100 flex items-center gap-4">
-        <BarChart2 className="h-10 w-10 text-orange-500" />
-        <div>
-          <p className="text-sm text-teal-700">Polls</p>
-          <p className="text-2xl font-bold text-teal-900">-</p>
+
+        {/* Last Gatepass Status */}
+        <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 p-6 rounded-xl shadow-lg border border-emerald-200 hover:shadow-xl transition col-span-1 md:col-span-2 lg:col-span-1">
+          <Key className="h-10 w-10 text-emerald-700 mb-3" />
+          <h3 className="text-lg font-semibold text-emerald-800">Last Gatepass</h3>
+          {lastGatepass ? (
+            <>
+              <p className="text-sm text-emerald-700">Visitor: {lastGatepass.visitorName}</p>
+              <p className="text-sm text-emerald-700">Purpose: {lastGatepass.visitPurpose}</p>
+              <p className="text-sm text-emerald-700">Status:
+                <span className={`ml-1 font-semibold ${
+                  lastGatepass.status === 'approved' ? 'text-green-600' :
+                  lastGatepass.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
+                }`}>
+                  {lastGatepass.status}
+                </span>
+              </p>
+              <p className="text-xs text-emerald-600 mt-2">
+                {new Date(lastGatepass.visitTime).toLocaleDateString()}
+              </p>
+            </>
+          ) : (
+            <p className="text-emerald-700 text-sm mt-2">No gatepass records found</p>
+          )}
         </div>
+
+        {/* SOS Alerts */}
+        <div className="bg-gradient-to-br from-red-100 to-red-50 p-6 rounded-xl shadow-lg border border-red-200 hover:shadow-xl transition">
+          <AlertTriangle className="h-10 w-10 text-red-700 mb-3" />
+          <h3 className="text-lg font-semibold text-red-800">Active SOS Alerts</h3>
+          <p className="text-3xl font-bold text-red-900 mt-1">{activeSOSAlerts.length}</p>
+        </div>
+        
+         <div className="bg-gradient-to-br from-blue-100 to-blue-50 p-6 rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition">
+          <TrendingUp className="h-10 w-10 text-blue-700 mb-3" />
+          <h3 className="text-lg font-semibold text-blue-800">Active Polls</h3>
+          <p className="text-3xl font-bold text-blue-900 mt-1">{activePolls.length}</p>
+        </div>
+
       </div>
     </div>
   );
+};
+
 
   // Complaint Delete
   const handleDeleteComplaint = async (complaintId) => {

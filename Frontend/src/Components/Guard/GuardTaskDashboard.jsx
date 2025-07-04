@@ -13,13 +13,41 @@ import {
   CircularProgress,
   Tabs,
   Tab,
+  Stack,
 } from "@mui/material";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 
-const statusColors = {
-  assigned: "default",
-  in_progress: "warning",
-  completed: "success",
+const statusDetails = {
+  assigned: {
+    color: "default",
+    label: "Assigned",
+    icon: <AssignmentIcon fontSize="small" sx={{ mr: 0.5 }} />,
+    chipColor: "info",
+  },
+  in_progress: {
+    color: "warning",
+    label: "In Progress",
+    icon: <HourglassTopIcon fontSize="small" sx={{ mr: 0.5 }} />,
+    chipColor: "warning",
+  },
+  completed: {
+    color: "success",
+    label: "Completed",
+    icon: <TaskAltIcon fontSize="small" sx={{ mr: 0.5 }} />,
+    chipColor: "success",
+  },
 };
+
+const tabDetails = [
+  { label: "Assigned", icon: <AssignmentIcon /> },
+  { label: "In Progress", icon: <HourglassTopIcon /> },
+  { label: "Completed", icon: <TaskAltIcon /> },
+];
 
 const GuardTasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -36,7 +64,6 @@ const GuardTasks = () => {
       });
       setTasks(response.data.tasks);
     } catch (err) {
-      console.error("Fetch Error:", err);
       setSnackbar({ open: true, message: "Failed to load tasks", severity: "error" });
     } finally {
       setLoading(false);
@@ -50,23 +77,40 @@ const GuardTasks = () => {
         { status: newStatus },
         { headers: { Authorization: token } }
       );
-      setSnackbar({ open: true, message: `Task marked as ${newStatus}`, severity: "success" });
+      setSnackbar({ open: true, message: `Task marked as ${statusDetails[newStatus].label}`, severity: "success" });
       fetchTasks();
     } catch (err) {
-      console.error("Update Error:", err);
       setSnackbar({ open: true, message: "Failed to update task", severity: "error" });
     }
   };
 
   const renderTaskCard = (task) => (
-    <Card key={task._id} sx={{ mb: 2 }}>
+    <Card
+      key={task._id}
+      sx={{
+        mb: 3,
+        borderRadius: 3,
+        boxShadow: 3,
+        transition: "transform 0.15s, box-shadow 0.15s",
+        "&:hover": {
+          transform: "translateY(-4px) scale(1.03)",
+          boxShadow: 6,
+        },
+        background: "linear-gradient(90deg, #e3f2fd 0%, #f8bbd0 100%)",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6">{task.title}</Typography>
-        <Typography>{task.description}</Typography>
-        <Box mt={1}>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, display: "flex", alignItems: "center" }}>
+          {statusDetails[task.status].icon}
+          {task.title}
+        </Typography>
+        <Typography sx={{ color: "text.secondary", mb: 2 }}>{task.description}</Typography>
+        <Box>
           <Chip
-            label={task.status.replace("_", " ").toUpperCase()}
-            color={statusColors[task.status]}
+            label={statusDetails[task.status].label}
+            icon={statusDetails[task.status].icon}
+            color={statusDetails[task.status].chipColor}
+            sx={{ fontWeight: 500, fontSize: 13 }}
           />
         </Box>
       </CardContent>
@@ -76,6 +120,7 @@ const GuardTasks = () => {
             onClick={() => updateTaskStatus(task._id, "in_progress")}
             variant="outlined"
             color="warning"
+            startIcon={<HourglassTopIcon />}
           >
             Mark In Progress
           </Button>
@@ -85,6 +130,7 @@ const GuardTasks = () => {
             onClick={() => updateTaskStatus(task._id, "completed")}
             variant="contained"
             color="success"
+            startIcon={<CheckCircleOutlineIcon />}
           >
             Mark Completed
           </Button>
@@ -101,24 +147,58 @@ const GuardTasks = () => {
 
   useEffect(() => {
     fetchTasks();
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        My Tasks
-      </Typography>
-
-      <Tabs value={currentTab} onChange={(e, newValue) => setCurrentTab(newValue)} sx={{ mb: 2 }}>
-        <Tab label="Assigned" />
-        <Tab label="In Progress" />
-        <Tab label="Completed" />
+    <Box
+      sx={{
+        p: { xs: 2, md: 4 },
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%)",
+        borderRadius: 2,
+      }}
+    >
+      <Tabs
+        value={currentTab}
+        onChange={(e, newValue) => setCurrentTab(newValue)}
+        sx={{
+          mb: 3,
+          "& .MuiTab-root": { fontWeight: 600, fontSize: 16, minHeight: 48 },
+          "& .Mui-selected": { color: "#1976d2" },
+        }}
+        TabIndicatorProps={{
+          style: {
+            background: "linear-gradient(90deg, #1976d2 0%, #d81b60 100%)",
+            height: 4,
+            borderRadius: 2,
+          },
+        }}
+      >
+        {tabDetails.map((tab, idx) => (
+          <Tab
+            key={tab.label}
+            icon={tab.icon}
+            iconPosition="start"
+            label={tab.label}
+            sx={{ minWidth: 130 }}
+          />
+        ))}
       </Tabs>
 
       {loading ? (
-        <CircularProgress />
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+          <CircularProgress size={40} thickness={4} />
+        </Box>
       ) : groupedTasks[currentTab].length === 0 ? (
-        <Typography>No tasks in this category.</Typography>
+        <Stack alignItems="center" sx={{ mt: 8 }}>
+          {currentTab === 0 && <AssignmentIcon sx={{ fontSize: 48, color: "#bdbdbd" }} />}
+          {currentTab === 1 && <HourglassTopIcon sx={{ fontSize: 48, color: "#ffa726" }} />}
+          {currentTab === 2 && <TaskAltIcon sx={{ fontSize: 48, color: "#43a047" }} />}
+          <Typography variant="h6" color="text.secondary" sx={{ mt: 2 }}>
+            No tasks in this category.
+          </Typography>
+        </Stack>
       ) : (
         groupedTasks[currentTab].map(renderTaskCard)
       )}
@@ -127,8 +207,14 @@ const GuardTasks = () => {
         open={snackbar.open}
         autoHideDuration={4000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ fontWeight: 500 }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
