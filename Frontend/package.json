@@ -20,6 +20,7 @@
     "bootstrap": "^5.3.7",
     "framer-motion": "^12.20.5",
     "lucide-react": "^0.518.0",
+    "notistack": "^3.0.2",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
@@ -27,6 +28,7 @@
     "react-router-dom": "^7.6.2",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
+    "sonner": "^2.0.6",
     "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {

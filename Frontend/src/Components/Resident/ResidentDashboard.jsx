@@ -123,7 +123,8 @@ const renderOverview = () => {
   const openComplaints = complaints.filter(c => c.status === 'open' || c.status === 'in-progress');
   const totalComplaints = complaints.length;
   const recentAnnouncements = broadcasts.filter(b => new Date(b.createdAt) > new Date(Date.now() - 72 * 60 * 60 * 1000));
-  const lastGatepass = gatepasses[gatepasses.length - 1];
+const sortedGatepasses = [...gatepasses].sort((a, b) => new Date(b.visitTime) - new Date(a.visitTime));
+const lastGatepass = sortedGatepasses[0];
   const activeSOSAlerts = sosAlerts.filter(alert => alert.isResolved === false);
   const activePolls = polls.filter(p => new Date(p.expiresAt) > new Date());
 

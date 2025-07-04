@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 export const signupController = async (req, res) => {
     try {
-        const { name, email, password, role, houseNumber, services_offered, availability, assignedHouseNo } = req.body;
+        const { name, email, password, role, houseNumber, services_offered, availability, assignedHouseNo,phoneNumber } = req.body;
         if (!name || !email || !password || !role) {
             return res.status(400).json({
                 message: "Please fill all the mendatory fields"
@@ -16,7 +16,7 @@ export const signupController = async (req, res) => {
                 message: "Please fill all the mendatory fields"
             })
         }
-        if (role === 'service_provider' && (!services_offered || !availability || !assignedHouseNo)) {
+        if (role === 'service_provider' && (!services_offered || !availability )) {
             return res.status(400).json({
                 message: "Please fill all the mendatory fields"
             })
@@ -42,7 +42,8 @@ export const signupController = async (req, res) => {
             houseNumber,
             services_offered,
             availability,
-            assignedHouseNo
+            assignedHouseNo,
+            phoneNumber
         })
         return res.status(201).json({
             message: `User created successfully with role ${role}`,

@@ -1,4 +1,3 @@
-// Full updated ResidentBookings.jsx
 import React, { useEffect, useState } from 'react';
 import {
   Calendar,
@@ -13,6 +12,7 @@ import {
   Star,
 } from 'lucide-react';
 import axios from 'axios';
+import { SnackbarProvider, useSnackbar } from 'notistack'; // ✅ Import Notistack
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/api/v1/service-booking',
@@ -24,6 +24,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// BookingCard Component
 const BookingCard = ({ booking, isHistory }) => {
   const date = new Date(booking.dateTime).toLocaleDateString();
   const time = new Date(booking.dateTime).toLocaleTimeString([], {
@@ -58,7 +59,7 @@ const BookingCard = ({ booking, isHistory }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg transition-all border border-gray-100">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
       <div className="p-6">
         <div className="flex justify-between mb-4">
           <div className="flex space-x-3">
@@ -124,11 +125,20 @@ const BookingCard = ({ booking, isHistory }) => {
   );
 };
 
-const ResidentBookings = () => {
+// ResidentBookingsContent with snackbar logic
+const ResidentBookingsContent = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('upcoming');
   const [bookingStatusTab, setBookingStatusTab] = useState('all');
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [providers, setProviders] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState('');
+  const [availableServices, setAvailableServices] = useState([]);
+  const [service, setService] = useState('');
+  const [dateTime, setDateTime] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -136,14 +146,24 @@ const ResidentBookings = () => {
         const res = await api.get('/resident-booking');
         setBookings(res.data.bookings);
       } catch (error) {
-        console.error('Error fetching bookings:', error);
+        enqueueSnackbar('Failed to fetch bookings.', { variant: 'error' });
       } finally {
         setLoading(false);
       }
     };
 
+    const fetchProviders = async () => {
+      try {
+        const res = await api.get('/all-providers');
+        setProviders(res.data.providers);
+      } catch (err) {
+        enqueueSnackbar('Failed to fetch providers.', { variant: 'error' });
+      }
+    };
+
     fetchData();
-  }, []);
+    fetchProviders();
+  }, [enqueueSnackbar]);
 
   const now = new Date();
   const upcomingBookings = bookings.filter((b) => new Date(b.dateTime) >= now);
@@ -155,9 +175,10 @@ const ResidentBookings = () => {
       : upcomingBookings;
 
   return (
-    <div className="min-h-screen ">
-      <div className=" mx-auto p-6 space-y-8">
-        {/* Toggle Upcoming/History */}
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto p-6 space-y-8">
+
+        {/* View Toggle */}
         <div className="flex justify-center">
           <div className="bg-white rounded-2xl shadow p-2 border border-gray-100 flex gap-2">
             {['upcoming', 'history'].map((tab) => (
@@ -179,7 +200,7 @@ const ResidentBookings = () => {
           </div>
         </div>
 
-        {/* Status Tabs - only for history */}
+        {/* Status Filters */}
         {view === 'history' && (
           <div className="flex justify-center">
             <div className="bg-white rounded-2xl shadow p-2 border border-gray-100 flex gap-2 mt-4">
@@ -190,7 +211,7 @@ const ResidentBookings = () => {
                   className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition ${
                     bookingStatusTab === status
                       ? 'bg-teal-600 text-white shadow'
-                      : 'text-white-600 hover:text-white-900 hover:bg-teal-100'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-teal-100'
                   }`}
                 >
                   {status}
@@ -200,7 +221,104 @@ const ResidentBookings = () => {
           </div>
         )}
 
-        {/* Booking Cards */}
+        {/* Book Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setShowBookingForm(true)}
+            className="px-4 py-2 rounded-lg bg-teal-600 text-white font-medium hover:bg-teal-700 transition"
+          >
+            Book New Service
+          </button>
+        </div>
+
+        {/* Booking Form */}
+        {showBookingForm && (
+          <div className="bg-white p-6 rounded-xl shadow-xl mt-6">
+            <h2 className="text-xl font-bold mb-4">Book a Service</h2>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                try {
+                  await api.post('/book-service', {
+                    serviceprovider_id: selectedProvider,
+                    service,
+                    dateTime,
+                  });
+                  enqueueSnackbar('Service booked successfully!', { variant: 'success' });
+                  setShowBookingForm(false);
+                  window.location.reload();
+                } catch (err) {
+                  enqueueSnackbar('Booking failed. Try again.', { variant: 'error' });
+                }
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-sm font-medium mb-1">Service Provider</label>
+                <select
+                  required
+                  value={selectedProvider}
+                  onChange={(e) => {
+                    setSelectedProvider(e.target.value);
+                    const selected = providers.find(p => p._id === e.target.value);
+                    setAvailableServices(selected?.services_offered || []);
+                    setService('');
+                  }}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Select a provider</option>
+                  {providers.map(p => (
+                    <option key={p._id} value={p._id}>{p.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Service</label>
+                <select
+                  required
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                  className="w-full border border-gray-300 p-2 rounded"
+                >
+                  <option value="">Select service</option>
+                  {availableServices.map((s, i) => (
+                    <option key={i} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Date and Time</label>
+                <input
+                  required
+                  type="datetime-local"
+                  value={dateTime}
+                  onChange={(e) => setDateTime(e.target.value)}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setShowBookingForm(false)}
+                  className="px-4 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700"
+                >
+                  Confirm Booking
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Bookings List */}
         <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
           <h2 className="text-2xl font-bold text-center mb-8 text-gray-900">
             {view === 'upcoming' ? 'Upcoming Bookings' : 'Booking History'}
@@ -227,6 +345,15 @@ const ResidentBookings = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// ✅ Export ResidentBookings with SnackbarProvider
+const ResidentBookings = () => {
+  return (
+    <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+      <ResidentBookingsContent />
+    </SnackbarProvider>
   );
 };
 
