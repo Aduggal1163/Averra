@@ -21,6 +21,9 @@ const complaintSchema=new mongoose.Schema({
         type: String,
         enum: ['open', 'in_progress', 'resolved','cancelled'],
         default: 'open'
+    },
+    description:{
+        type:String,
     }
 },{timestamps:true});
 

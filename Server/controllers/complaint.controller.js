@@ -1,7 +1,7 @@
 import Complaint from "../models/Complaint.model.js";
 export const raiseComplaint = async (req,res)=>{
     try {
-        const {issue,urgency} = req.body;
+        const {issue,urgency,description} = req.body;
         const userId  = req.user.id;
         const image= req.file ? req.file.path : null;
         if(!issue || !urgency)
@@ -14,7 +14,8 @@ export const raiseComplaint = async (req,res)=>{
             issue:issue,
             urgency:urgency,
             userId ,
-            image:image
+            image:image,
+            description:description
         })
         res.status(201).json({
             message: "Complaint raised successfully",

@@ -27,6 +27,19 @@ function ResidentDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
 
+  // Slides for complaints and gatepass
+  const [complaintsTab, setComplaintsTab] = useState('all');
+  const [gatepassTab, setGatepassTab] = useState('all');
+
+  // Announcements tabs
+  const announcementTabs = [
+    { id: 'all', label: 'All' },
+    { id: 'info', label: 'Info' },
+    { id: 'warning', label: 'Warning' },
+    { id: 'error', label: 'Error' }
+  ];
+  const [announcementTab, setAnnouncementTab] = useState('all');
+
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     if (!userData) {
@@ -112,7 +125,7 @@ function ResidentDashboard() {
         <div>
           <p className="text-sm text-teal-700">Pending Gatepass</p>
           <p className="text-2xl font-bold text-teal-900">
-            {gatepasses.filter(g => g.status === 'pending').length}
+            {gatepasses.filter(g => g.status === 'open').length}
           </p>
         </div>
       </div>
@@ -150,7 +163,20 @@ function ResidentDashboard() {
     }
   };
 
-  // Complaints Tab
+  // Complaint Slides
+  const complaintTabs = [
+    { id: 'all', label: 'All' },
+    { id: 'open', label: 'Open' },
+    { id: 'in-progress', label: 'In Progress' },
+    { id: 'resolved', label: 'Resolved' }
+  ];
+
+  const filterComplaints = (complaints, tab) => {
+    if (tab === 'all') return complaints;
+    if (tab === 'in-progress') return complaints.filter(c => c.status === 'in-progress' || c.status === 'in_progress');
+    return complaints.filter(c => c.status === tab);
+  };
+
   const renderComplaints = () => (
     <div className="bg-white/90 rounded-xl shadow-lg p-7 border border-teal-100">
       <div className="flex justify-between items-center mb-6">
@@ -163,8 +189,21 @@ function ResidentDashboard() {
           New Complaint
         </button>
       </div>
+      {/* Complaint Status Tabs */}
+      <div className="flex gap-2 mb-5">
+        {complaintTabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setComplaintsTab(tab.id)}
+            className={`px-4 py-1 rounded-full font-semibold transition
+              ${complaintsTab === tab.id ? 'bg-teal-600 text-white' : 'bg-teal-50 text-teal-700 hover:bg-teal-100'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
       <div className="space-y-4">
-        {complaints.map((complaint) => (
+        {filterComplaints(complaints, complaintsTab).map((complaint) => (
           <div key={complaint.id} className="border border-teal-100 rounded-lg p-4 bg-teal-50/50">
             <div className="flex justify-between items-start">
               <div>
@@ -188,21 +227,33 @@ function ResidentDashboard() {
                 {complaint.status === 'resolved' && (
                   <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Resolved</span>
                 )}
-                {complaint.status === 'in_progress' && (
+                {(complaint.status === 'in_progress' || complaint.status === 'in-progress') && (
                   <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">In Progress</span>
                 )}
               </div>
             </div>
           </div>
         ))}
-        {complaints.length === 0 && (
+        {filterComplaints(complaints, complaintsTab).length === 0 && (
           <p className="text-teal-500 text-center py-8">No complaints found</p>
         )}
       </div>
     </div>
   );
 
-  // Gatepass Tab
+  // Gatepass Slides
+  const gatepassTabs = [
+    { id: 'all', label: 'All' },
+    { id: 'pending', label: 'Pending' },
+    { id: 'approved', label: 'Approved' },
+    { id: 'rejected', label: 'Rejected' }
+  ];
+
+  const filterGatepasses = (gatepasses, tab) => {
+    if (tab === 'all') return gatepasses;
+    return gatepasses.filter(g => g.status === tab);
+  };
+
   const renderGatepass = () => (
     <div className="bg-white/90 rounded-xl shadow-lg p-7 border border-teal-100">
       <div className="flex justify-between items-center mb-6">
@@ -215,8 +266,21 @@ function ResidentDashboard() {
           Request Gatepass
         </button>
       </div>
+      {/* Gatepass Status Tabs */}
+      <div className="flex gap-2 mb-5">
+        {gatepassTabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setGatepassTab(tab.id)}
+            className={`px-4 py-1 rounded-full font-semibold transition
+              ${gatepassTab === tab.id ? 'bg-emerald-600 text-white' : 'bg-teal-50 text-teal-700 hover:bg-teal-100'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
       <div className="space-y-4">
-        {gatepasses.map((gatepass) => (
+        {filterGatepasses(gatepasses, gatepassTab).map((gatepass) => (
           <div key={gatepass.id} className="border border-teal-100 rounded-lg p-4 bg-teal-50/50">
             <div className="flex justify-between items-start">
               <div>
@@ -242,33 +306,69 @@ function ResidentDashboard() {
             </div>
           </div>
         ))}
-        {gatepasses.length === 0 && (
+        {filterGatepasses(gatepasses, gatepassTab).length === 0 && (
           <p className="text-teal-500 text-center py-8">No gatepass requests found</p>
         )}
       </div>
     </div>
   );
 
+  // Announcements Helpers
+  const filterAnnouncements = (broadcasts, tab) => {
+    if (tab === 'all') return broadcasts;
+    return broadcasts.filter(b => b.type === tab);
+  };
+
+  const getAnnouncementStyle = (type) => {
+    switch (type) {
+      case 'info':
+        return 'border-blue-200 bg-blue-50/50';
+      case 'warning':
+        return 'border-yellow-200 bg-yellow-50/50';
+      case 'error':
+        return 'border-red-200 bg-red-50/50';
+      default:
+        return 'border-teal-100 bg-teal-50/50';
+    }
+  };
+
   // Announcements Tab
   const renderAnnouncements = () => (
     <div className="bg-white/90 rounded-xl shadow-lg p-7 border border-teal-100">
       <h3 className="text-xl font-bold text-teal-900 mb-6">Community Announcements</h3>
+      {/* Announcement Type Tabs */}
+      <div className="flex gap-2 mb-5">
+        {announcementTabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setAnnouncementTab(tab.id)}
+            className={`px-4 py-1 rounded-full font-semibold transition
+              ${announcementTab === tab.id ? 'bg-teal-600 text-white' : 'bg-teal-50 text-black-700 hover:bg-teal-100'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
       <div className="space-y-4">
-        {broadcasts.map((broadcast) => (
-          <div key={broadcast.id} className="border border-teal-100 rounded-lg p-4 bg-teal-50/50">
-            <div className="flex items-start gap-3">
-              <Megaphone className="h-5 w-5 text-blue-600 mt-1" />
-              <div className="flex-1">
-                <h4 className="font-semibold text-teal-800">{broadcast.title}</h4>
-                <p className="text-teal-700 text-sm mt-1">{broadcast.message}</p>
-                <p className="text-xs text-teal-500 mt-2">
-                  {new Date(broadcast.createdAt).toLocaleDateString()}
-                </p>
-              </div>
+        {filterAnnouncements(broadcasts, announcementTab).map((broadcast) => (
+          <div
+            key={broadcast.id}
+            className={`border rounded-lg p-4 flex items-start gap-3 ${getAnnouncementStyle(broadcast.type)}`}
+          >
+            {/* Icon based on type */}
+            {broadcast.type === 'info' && <Megaphone className="h-5 w-5 text-blue-600 mt-1" />}
+            {broadcast.type === 'warning' && <AlertTriangle className="h-5 w-5 text-yellow-600 mt-1" />}
+            {broadcast.type === 'error' && <AlertTriangle className="h-5 w-5 text-red-600 mt-1" />}
+            <div className="flex-1">
+              <h4 className="font-semibold text-teal-800">{broadcast.title}</h4>
+              <p className="text-teal-700 text-sm mt-1">{broadcast.message}</p>
+              <p className="text-xs text-teal-500 mt-2">
+                {new Date(broadcast.createdAt).toLocaleDateString()}
+              </p>
             </div>
           </div>
         ))}
-        {broadcasts.length === 0 && (
+        {filterAnnouncements(broadcasts, announcementTab).length === 0 && (
           <p className="text-teal-500 text-center py-8">No announcements found</p>
         )}
       </div>
@@ -464,7 +564,7 @@ function NewComplaintForm({ onBack, onSuccess }) {
             type="text"
             value={formData.issue}
             onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
-            className="w-full px-4 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 bg-teal-50/50 placeholder:text-teal-400"
+            className="w-full px-4 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 bg-teal-50/50 placeholder:text-black-400"
             placeholder="Describe the issue"
             required
           />
@@ -502,7 +602,7 @@ function NewComplaintForm({ onBack, onSuccess }) {
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={4}
-            className="w-full px-4 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 bg-teal-50/50 placeholder:text-teal-400"
+            className="w-full px-4 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 bg-teal-50/50 placeholder:text-black-400"
             placeholder="Add more details"
             required
           />
