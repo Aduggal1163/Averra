@@ -166,7 +166,7 @@ const ResidentBookings = () => {
                 onClick={() => setView(tab)}
                 className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   view === tab
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-teal-300 to-teal-600 text-white shadow-lg'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
@@ -189,8 +189,8 @@ const ResidentBookings = () => {
                   onClick={() => setBookingStatusTab(status)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition ${
                     bookingStatusTab === status
-                      ? 'bg-blue-600 text-white shadow'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-teal-600 text-white shadow'
+                      : 'text-white-600 hover:text-white-900 hover:bg-teal-100'
                   }`}
                 >
                   {status}
