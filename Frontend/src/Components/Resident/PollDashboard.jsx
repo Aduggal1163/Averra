@@ -127,7 +127,7 @@ const PollDashboard = () => {
         <div className="max-w-6xl mx-auto px-4 py-6 w-300">
           <div className="flex items-center justify-between ">
             <div className="flex items-center space-x-3 w-300">
-              <Vote className="w-8 h-8 text-blue-600" />
+              <Vote className="w-8 h-8 text-teal-600" />
               <h1 className="text-2xl font-bold text-gray-900">Community Polls</h1>
             </div>
             
@@ -165,7 +165,7 @@ const PollDashboard = () => {
                 onClick={() => setFilter(key)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   filter === key
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-teal-600 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
