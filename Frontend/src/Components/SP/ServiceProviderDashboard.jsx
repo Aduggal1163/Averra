@@ -253,13 +253,16 @@ const ServiceProviderBookings = () => {
               </Typography>
             </Box>
             
-            <Button
+           <b>
+             <Button
               variant="outlined"
               startIcon={<ExitToApp />}
               onClick={handleLogoutFunction}
-              sx={{
-                borderColor: 'rgba(255,255,255,0.5)',
-                color: 'white',
+              style={{fontWeight:800}}
+              sx={{ 
+                bgcolor: alpha('#fff', 0.2), 
+                color: '#fff',
+                border: '2px solid rgba(255,255,255,0.3)',
                 ml: 2,
                 '&:hover': { 
                   borderColor: 'white', 
@@ -269,6 +272,7 @@ const ServiceProviderBookings = () => {
             >
               Logout
             </Button>
+           </b>
           </Box>
         </Toolbar>
         

@@ -152,7 +152,7 @@ const GuardDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-gray-50 to-indigo-50">
       <div className="px-4 py-2">
         {/* Header */}
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-3 p-3">
           <h1 className="text-3xl font-semibold text-gray-900 flex items-center">
             <User className="h-8 w-8 text-blue-600 mr-2" />
             Guard Dashboard

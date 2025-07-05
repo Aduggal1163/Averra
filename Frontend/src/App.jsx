@@ -5,11 +5,13 @@ import LandingPage from './Components/LandingPage.jsx'
 import Register from './Forms/RegistrationForm.jsx'
 import Login from './Forms/Login.jsx'
 import RoleProtectedRoute from './Components/RoleProtectedRoute.jsx'
-import Unauthorized from './Components/Unauthorized.jsx'
+import Unauthorized from './Components/landingpagecomponents/Unauthorized.jsx'
 import ResidentDashboard from './Components/Resident/ResidentDashboard.jsx'
 import AdminDashboard from './Components/Admin/AdminDashboard.jsx'
 import GuardDashboard from './Components/Guard/GuardDasshboard.jsx'
 import ServiceProviderDashboard from './Components/SP/ServiceProviderDashboard.jsx'
+import About from './Components/landingpagecomponents/About.jsx'
+import Contact from './Components/landingpagecomponents/Contact.jsx'
 // import AdminRoutes from './Components/Admin/AdminRoutes.jsx'
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<Register />} />
           <Route path='/login' element={<Login/>}/>
+          <Route path="/about" element={<About/>}/>
+          <Route path="/contact" element={<Contact/>}/>
           {/* <Route path="/admin/*" element={<AdminRoutes />} /> */}
          <Route
     path="/resident-dashboard"
