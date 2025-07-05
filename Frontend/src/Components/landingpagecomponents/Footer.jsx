@@ -33,9 +33,9 @@ function Footer() {
             <h4 className="text-lg font-semibold mb-2">Contact</h4>
             <div className="flex items-center mb-2">
               <Phone className="h-5 w-5 text-lime-600 mr-2" />
-              <span className="text-sm">+91 85353 158388</span>
+              <span className="text-sm">+91 73557-3XXXX</span>
             </div>
-            <p className="text-sm">Email: support@Averra.com</p>
+            <p className="text-sm">Email: abhishekduggal04@gmail.com</p>
           </div>
         </div>
       </footer>

@@ -55,7 +55,7 @@ const LandingPage = () => {
         <div className="w-full md:w-1/2 flex justify-center">
           <div className="rounded-2xl overflow-hidden shadow-xl border border-lime-100 w-full max-w-lg">
             <img
-              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+              src="https://content.jdmagicbox.com/comp/pune/i4/020pxx20.xx20.181011231025.j1i4/catalogue/ruby-park-co-operative-housing-society-wakad-pune-residential-buildings-xhj9ung491.jpg"
               alt="Residents interacting with dashboard"
               className="w-full h-72 md:h-96 object-cover"
             />

@@ -12,6 +12,7 @@ import GuardDashboard from './Components/Guard/GuardDasshboard.jsx'
 import ServiceProviderDashboard from './Components/SP/ServiceProviderDashboard.jsx'
 import About from './Components/landingpagecomponents/About.jsx'
 import Contact from './Components/landingpagecomponents/Contact.jsx'
+import Footer from './Components/landingpagecomponents/Footer.jsx'
 // import AdminRoutes from './Components/Admin/AdminRoutes.jsx'
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
     element={
       <RoleProtectedRoute allowedRoles={["resident"]}>
         <ResidentDashboard />
+        <Footer/>
       </RoleProtectedRoute>
     }
   />
@@ -38,6 +40,7 @@ function App() {
     element={
       <RoleProtectedRoute allowedRoles={["admin"]}>
         <AdminDashboard />
+        <Footer/>
       </RoleProtectedRoute>
     }
   />
@@ -46,6 +49,7 @@ function App() {
     element={
       <RoleProtectedRoute allowedRoles={["guard"]}>
         <GuardDashboard />
+        <Footer/>
       </RoleProtectedRoute>
     }
   />
@@ -54,6 +58,7 @@ function App() {
     element={
       <RoleProtectedRoute allowedRoles={["service_provider"]}>
         <ServiceProviderDashboard />
+        <Footer/>
       </RoleProtectedRoute>
     }
   />

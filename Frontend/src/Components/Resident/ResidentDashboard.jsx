@@ -442,7 +442,8 @@ const lastGatepass = sortedGatepasses[0];
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-amber-50">
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-amber-50">
       <ToastContainer />
 
       {/* Header */}
@@ -556,6 +557,7 @@ const lastGatepass = sortedGatepasses[0];
         {activeTab === 'communties' && <Dashboard />}
       </main>
     </div>
+    </>
   );
 }
 
