@@ -10,9 +10,13 @@ import BroadcastRouter from './routes/broadcast.routes.js'
 import PollRoutes from './routes/poll.routes.js'
 import SOSAlertsRoutes from './routes/sosalert.route.js'
 import GuardTaskRoutes from './routes/guardtask.routes.js'
+import ContactRoutes from './routes/Contact.routes.js'
 import cors from 'cors'
+
 dotenv.config();
+
 const app=express();
+
 app.use(express.json());
 app.use(cors())
 
@@ -25,6 +29,7 @@ app.use("/api/v1/broadcast",BroadcastRouter);
 app.use("/api/v1/poll",PollRoutes);
 app.use("/api/v1/sos",SOSAlertsRoutes);
 app.use("/api/v1/guardtask",GuardTaskRoutes)
+app.use("/api/v1/contact",ContactRoutes);
 
 dbconnect();
 app.listen(process.env.PORT,()=>{
