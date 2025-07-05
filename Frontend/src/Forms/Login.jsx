@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(`${BACKEND_URL}/signin`, formData);
+      const response = await axios.post(`${BACKEND_URL}/auth/signin`, formData);
 
       // Save token and user
       localStorage.setItem("token", response.data.token);
