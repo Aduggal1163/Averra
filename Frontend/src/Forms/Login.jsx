@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "sonner"; // <-- import Sonner
-
+import { BACKEND_URL } from "../../config";
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/auth/signin", formData);
+      const response = await axios.post(`${BACKEND_URL}/signin`, formData);
 
       // Save token and user
       localStorage.setItem("token", response.data.token);

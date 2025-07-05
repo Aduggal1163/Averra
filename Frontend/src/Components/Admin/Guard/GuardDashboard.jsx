@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Search, Bell, MoreHorizontal, Calendar, User, ChevronLeft, ChevronRight } from "lucide-react";
-
+import { BACKEND_URL } from "../../../../config";
 // Your exact original API setup - UNCHANGED
 const api = (() => {
   const axiosInstance = {
-    baseURL: "http://localhost:8080/api/v1",
+    baseURL: `${BACKEND_URL}`,
     get: async (url) => {
       const token = localStorage?.getItem?.("token") || "";
       const headers = token ? { Authorization: token } : {};
-      const response = await fetch(`http://localhost:8080/api/v1${url}`, {
+      const response = await fetch(`${BACKEND_URL}${url}`, {
         method: 'GET',
         headers
       });
@@ -20,7 +20,7 @@ const api = (() => {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: token } : {})
       };
-      const response = await fetch(`http://localhost:8080/api/v1${url}`, {
+      const response = await fetch(`${BACKEND_URL}${url}`, {
         method: 'POST',
         headers,
         body: JSON.stringify(data)
@@ -30,7 +30,7 @@ const api = (() => {
     delete: async (url) => {
       const token = localStorage?.getItem?.("token") || "";
       const headers = token ? { Authorization: token } : {};
-      const response = await fetch(`http://localhost:8080/api/v1${url}`, {
+      const response = await fetch(`${BACKEND_URL}${url}`, {
         method: 'DELETE',
         headers
       });

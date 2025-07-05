@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BACKEND_URL } from '../../../config';
 import {
   Calendar,
   Clock,
@@ -15,7 +16,7 @@ import axios from 'axios';
 import { SnackbarProvider, useSnackbar } from 'notistack'; // ✅ Import Notistack
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/service-booking',
+  baseURL: `${BACKEND_URL}/service-booking`,
 });
 
 api.interceptors.request.use((config) => {

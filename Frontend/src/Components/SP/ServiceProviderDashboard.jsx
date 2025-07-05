@@ -14,8 +14,8 @@ import {
   PendingActions, FilterList, CalendarToday, Star,
   Refresh, ExitToApp
 } from '@mui/icons-material';
-
-const BASE_URL = 'http://localhost:8080/api/v1/service-booking';
+import { BACKEND_URL } from '../../../config';
+const BASE_URL = `${BACKEND_URL}/service-booking`;
 
 const ServiceProviderBookings = () => {
   const [bookings, setBookings] = useState([]);

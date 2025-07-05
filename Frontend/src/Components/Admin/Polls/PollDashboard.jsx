@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-
+import { BACKEND_URL } from '../../../../config';
 // Dummy auth
 const getAuthHeaders = () => ({
   headers: {
@@ -10,7 +10,7 @@ const getAuthHeaders = () => ({
   },
 });
 
-const API_BASE_URL = 'http://localhost:8080/api/v1/poll/';
+const API_BASE_URL = `${BACKEND_URL}/poll/`;
 
 const PollDashboard = () => {
   const [polls, setPolls] = useState([]);

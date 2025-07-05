@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { BACKEND_URL } from '../../../../config';
 function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ function UserManagement() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/api/v1/users/allusers');
+      const res = await axios.get(`${BACKEND_URL}/users/allusers`);
       setUsers(res.data.users);
     } catch (error) {
       console.log("Fetch user error", error);
@@ -36,7 +36,7 @@ function UserManagement() {
 
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/v1/users/updateuser/${id}`,
+        `${BACKEND_URL}/users/updateuser/${id}`,
         updatedData,
         {
           headers: {
@@ -74,7 +74,7 @@ function UserManagement() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:8080/api/v1/users/deleteuser/${id}`,
+        `${BACKEND_URL}/users/deleteuser/${id}`,
         {
           headers: {
             Authorization: token,

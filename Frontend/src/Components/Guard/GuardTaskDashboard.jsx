@@ -19,9 +19,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-
+import { BACKEND_URL } from "../../../config.js";
 const statusDetails = {
   assigned: {
     color: "default",
@@ -59,7 +57,7 @@ const GuardTasks = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/guardtask/mytasks", {
+      const response = await axios.get(`${BACKEND_URL}/guardtask/mytasks`, {
         headers: { Authorization: token },
       });
       setTasks(response.data.tasks);
@@ -73,7 +71,7 @@ const GuardTasks = () => {
   const updateTaskStatus = async (taskId, newStatus) => {
     try {
       await axios.post(
-        `http://localhost:8080/api/v1/guardtask/update/${taskId}`,
+        `${BACKEND_URL}/guardtask/update/${taskId}`,
         { status: newStatus },
         { headers: { Authorization: token } }
       );

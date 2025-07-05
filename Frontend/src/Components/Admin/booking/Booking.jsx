@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, User, Briefcase, CheckCircle, XCircle, AlertCircle, Settings } from 'lucide-react'
-
+import { BACKEND_URL } from '../../../../config';
 import axios from 'axios';
 
 function AllBookings() {
@@ -9,7 +9,7 @@ function AllBookings() {
 const [activeTab, setActiveTab] = useState('pending');
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/v1/service-booking/allbookings', {
+      const res = await axios.get(`${BACKEND_URL}/service-booking/allbookings`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         },

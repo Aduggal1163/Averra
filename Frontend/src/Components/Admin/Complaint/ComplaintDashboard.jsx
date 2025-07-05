@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, RefreshCw, Clock, CheckCircle, XCircle, AlertTriangle, User, Calendar, MapPin, FileText, Image } from 'lucide-react';
 import axios from 'axios';
+import { BACKEND_URL } from '../../../../config';
 const  ComplaintDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ const  ComplaintDashboard = () => {
   const fetchComplaints = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8080/api/v1/complaints/getAllComplaints', {
+      const response = await axios.get(`${BACKEND_URL}/complaints/getAllComplaints`, {
         headers: {
           'Authorization': localStorage.getItem('token'),
           'Content-Type': 'application/json'
@@ -33,7 +34,7 @@ const  ComplaintDashboard = () => {
   try {
     setUpdating(complaintId);
     const response = await axios.post(
-      `http://localhost:8080/api/v1/complaints/updateComplaint/${complaintId}`,
+      `${BACKEND_URL}/complaints/updateComplaint/${complaintId}`,
       { status: newStatus }, // ✅ Correct way to send request body
       {
         headers: {
@@ -65,7 +66,7 @@ const deleteComplaint = async (complaintId) => {
   }
 
   try {
-    await axios.delete(`http://localhost:8080/api/v1/complaints/deleteComplaint/${complaintId}`, {
+    await axios.delete(`${BACKEND_URL}/complaints/deleteComplaint/${complaintId}`, {
       headers: {
         'Authorization': localStorage.getItem('token'),
         'Content-Type': 'application/json'

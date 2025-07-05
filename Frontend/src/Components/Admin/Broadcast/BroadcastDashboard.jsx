@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, AlertCircle, Info, AlertTriangle, X, Save, ChevronDown, ChevronUp } from 'lucide-react';
 import axios from 'axios';
-
+import { BACKEND_URL } from '../../../../config';
 const BroadcastDashboard = () => {
     const [broadcasts, setBroadcasts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ const BroadcastDashboard = () => {
     const [errors, setErrors] = useState({});
 
     // Mock API base URL - replace with your actual API URL
-    const API_BASE = 'http://localhost:8080/api/v1/broadcast';
+    const API_BASE = `${BACKEND_URL}/broadcast`;
 
     // Mock auth token - replace with your actual auth implementation
     const getAuthToken = () => localStorage.getItem('token');
@@ -129,7 +129,7 @@ const BroadcastDashboard = () => {
                 category: formData.category
             };
 
-            const response = await axios.post(`http://localhost:8080/api/v1/broadcast/updateBroadcast/${editingBroadcast._id}`, updateData,{
+            const response = await axios.post(`${BACKEND_URL}/broadcast/updateBroadcast/${editingBroadcast._id}`, updateData,{
                 headers:{
                     "Authorization":localStorage.getItem("token")
                 }
@@ -157,7 +157,7 @@ const BroadcastDashboard = () => {
 
         setLoading(true);
         try {
-            const response = await axios.delete(`http://localhost:8080/api/v1/broadcast/deleteBroadcast/${_id}`, {
+            const response = await axios.delete(`${BACKEND_URL}/broadcast/deleteBroadcast/${_id}`, {
                 headers: {
                     'Authorization': localStorage.getItem("token")
                 }

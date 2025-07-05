@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Shield, Heart, Flame, Clock, CheckCircle, User, Calendar, RefreshCw } from 'lucide-react';
-
+import { BACKEND_URL } from '../../../../config';
 const SOSAlertDashboard = () => {
   const [alerts, setAlerts] = useState([]);
   const [unresolvedAlerts, setUnresolvedAlerts] = useState([]);
@@ -11,7 +11,7 @@ const SOSAlertDashboard = () => {
   const [error, setError] = useState('');
 
   // Configure your backend URL here
-  const API_BASE_URL = 'http://localhost:8080/api/v1'; // Change this to your actual backend URL
+  const API_BASE_URL = `${BACKEND_URL}`; // Change this to your actual backend URL
 
   const alertTypes = [
     { value: 'medical', label: 'Medical Emergency', icon: Heart, color: 'from-red-500 to-pink-600', bgColor: 'bg-red-50', textColor: 'text-red-700' },

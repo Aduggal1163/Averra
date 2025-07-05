@@ -3,7 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
+import { BACKEND_URL } from '../../../config';
 const Contact = () => {
   const [form, setForm] = useState({
     name: '',
@@ -35,7 +35,7 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:8080/api/v1/contact/feedback', form);
+      const res = await axios.post(`${BACKEND_URL}/contact/feedback`, form);
       Swal.fire({
         icon: 'success',
         title: 'Thank You!',

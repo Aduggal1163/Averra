@@ -4,6 +4,7 @@ import backgroundImageUrl from '/assets/background.webp';
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +53,7 @@ const RegisterForm = () => {
         ...(role === "service_provider" && { services_offered }),
       };
       console.log(payload);
-      await axios.post("http://localhost:8080/api/v1/auth/signup", payload);
+      await axios.post(`${BACKEND_URL}/auth/signup`, payload);
       toast.success("Registration successful");
       setTimeout(() => {
         navigate("/login");

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from '../../../config';
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -61,22 +62,22 @@ function ResidentDashboard() {
       const headers = { Authorization: token };
 
       // Fetch complaints
-      const complaintsRes = await axios.get(`http://localhost:8080/api/v1/complaints/getComplaints/${userId}`, { headers });
+      const complaintsRes = await axios.get(`${BACKEND_URL}/complaints/getComplaints/${userId}`, { headers });
       setComplaints(complaintsRes.data.complaints || []);
 
       // Fetch gatepasses
-      const gatepassRes = await axios.get(`http://localhost:8080/api/v1/gatepass/mygatepass/${userId}`, { headers });
+      const gatepassRes = await axios.get(`${BACKEND_URL}/gatepass/mygatepass/${userId}`, { headers });
       setGatepasses(gatepassRes.data.gatepass || []);
 
       // Fetch broadcasts
-      const broadcastRes = await axios.get('http://localhost:8080/api/v1/broadcast/getAllBroadcast', { headers });
+      const broadcastRes = await axios.get(`${BACKEND_URL}/broadcast/getAllBroadcast`, { headers });
       setBroadcasts(broadcastRes.data.broadcasts || []);
 
       // Fetch SOS alerts
-    const sosRes = await axios.get(`http://localhost:8080/api/v1/sos/getunresolvedSOS`, { headers });
+    const sosRes = await axios.get(`${BACKEND_URL}/sos/getunresolvedSOS`, { headers });
     setSosAlerts(sosRes.data.alerts || []);
 
-    const poll=await axios.get('http://localhost:8080/api/v1/poll/getallpolls',{headers});
+    const poll=await axios.get(`${BACKEND_URL}/poll/getallpolls`,{headers});
     setPolls(poll.data.polls||[]);
 
     } catch (error) {
@@ -103,7 +104,7 @@ function ResidentDashboard() {
       setLoading(true);
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8080/api/v1/sos/create",
+        `${BACKEND_URL}/sos/create`,
         { type: selectedType },
         { headers: { Authorization: token } }
       );
@@ -200,7 +201,7 @@ const lastGatepass = sortedGatepasses[0];
   const handleDeleteComplaint = async (complaintId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8080/api/v1/complaints/deleteComplaint/${complaintId}`, {
+      await axios.delete(`${BACKEND_URL}complaints/deleteComplaint/${complaintId}`, {
         headers: { Authorization: token }
       });
       toast.success("Complaint deleted successfully");
@@ -583,7 +584,7 @@ function NewComplaintForm({ onBack, onSuccess }) {
       formDataToSend.append('urgency', formData.urgency);
       formDataToSend.append('userId', JSON.parse(localStorage.getItem('user')).id);
 
-      await axios.post('http://localhost:8080/api/v1/complaints/raise-complaint', formDataToSend, {
+      await axios.post(`${BACKEND_URL}/complaints/raise-complaint`, formDataToSend, {
         headers: {
           Authorization: token,
           'Content-Type': 'multipart/form-data'
@@ -698,7 +699,7 @@ function NewGatepassForm({ onBack, onSuccess }) {
       // Combine date + time into a single Date object
       const fullDateTime = new Date(`${formData.visitDate}T${formData.visitTime}`);
 
-      await axios.post('http://localhost:8080/api/v1/gatepass/requestGatepass', {
+      await axios.post(`${BACKEND_URL}/gatepass/requestGatepass`, {
         visitorName: formData.visitorName,
         visitPurpose: formData.visitPurpose,
         guardComments: formData.guardComments,

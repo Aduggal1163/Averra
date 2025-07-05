@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Vote, Clock, Users, TrendingUp, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
-
+import { BACKEND_URL } from '../../../config';
 const PollDashboard = () => {
   const [polls, setPolls] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ const PollDashboard = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   // Configure API base URL (adjust as needed)
-  const API_BASE_URL = 'http://localhost:8080/api/v1/poll'; // Update this to your backend URL
+  const API_BASE_URL = `${BACKEND_URL}/poll`; // Update this to your backend URL
   
   useEffect(() => {
     fetchPolls();

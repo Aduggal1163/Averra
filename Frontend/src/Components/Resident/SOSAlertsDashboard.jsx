@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, Clock, User, Calendar, Shield, Flame, Heart } from 'lucide-react';
 import axios from 'axios';
-
+import { BACKEND_URL } from '../../../config';
 const SOSAlertsDashboard = () => {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ const SOSAlertsDashboard = () => {
         throw new Error('No authentication token found');
       }
 
-      const response = await axios.get('http://localhost:8080/api/v1/sos/all', {
+      const response = await axios.get(`${BACKEND_URL}/sos/all`, {
         headers: {
           'Authorization':token,
         }

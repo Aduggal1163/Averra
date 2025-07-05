@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SOSAlertDashboard from '../Admin/SOS/SOSAlertDashboard.jsx';
 import GuardTasks from "./GuardTaskDashboard.jsx";
+import { BACKEND_URL } from "../../../config.js";
 import axios from "axios";
 import {
   LogOut,
@@ -68,7 +69,7 @@ const GuardDashboard = () => {
 
   const fetchPendingGatepasses = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/v1/gatepass/allpendinggatepasses", {
+      const res = await axios.get(`${BACKEND_URL}/gatepass/allpendinggatepasses`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setPendingGatepasses(res.data.pendinggatepass || []);
@@ -79,7 +80,7 @@ const GuardDashboard = () => {
 
   const fetchApprovedRejectedGatepasses = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/v1/gatepass/viewAllVisitorGatepass", {
+      const res = await axios.get(`${BACKEND_URL}/gatepass/viewAllVisitorGatepass`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
       const gatepasses = Array.isArray(res.data.data)
@@ -93,7 +94,7 @@ const GuardDashboard = () => {
 
   const fetchVisitorLog = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/v1/gatepass/visitorlog", {
+      const res = await axios.get(`${BACKEND_URL}/gatepass/visitorlog`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
       const allLogs = res.data.visitorLog || [];
@@ -113,7 +114,7 @@ const GuardDashboard = () => {
 
   const handleApproveReject = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/api/v1/gatepass/updateGatepassStatus/${id}`, {
+      await axios.post(`${BACKEND_URL}/gatepass/updateGatepassStatus/${id}`, {
         status,
         guardComments: comment,
       }, {
