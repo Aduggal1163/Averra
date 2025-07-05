@@ -1,1 +1,1 @@
-export const BACKEND_URL="https://averra.onrender.com"
+export const BACKEND_URL="https://averra.onrender.com/api/v1"
