@@ -20,6 +20,10 @@ const app=express();
 app.use(express.json());
 app.use(cors())
 
+app.get("/",(req,res)=>{
+    res.send("ACTIVE");
+})
+
 app.use("/api/v1/auth", AuthRouter);
 app.use("/api/v1/service-booking",BookingRoutes);
 app.use("/api/v1/complaints",ComplaintRoutes);
