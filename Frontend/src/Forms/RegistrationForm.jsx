@@ -135,10 +135,10 @@ const RegisterForm = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             >
-              <option value="resident">Resident</option>
-              <option value="admin">Admin</option>
+               <option value="resident">Resident</option>
+              {/*<option value="admin">Admin</option>*/}
               <option value="guard">Guard</option>
-              <option value="service_provider">Service Provider</option>
+              <option value="service_provider">Service Provider</option> 
             </select>
           </div>
           {formData.role === "resident" && (
